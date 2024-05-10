@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?xml-stylesheet href="http://moise.sourceforge.net/xml/os.xsl" type="text/xsl" ?>
+
+<organisational-specification
+    id="circulacao_bus_org"
+    os-version="0.8"
+
+    xmlns='http://moise.sourceforge.net/os'
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:schemaLocation='http://moise.sourceforge.net/os
+                        http://moise.sourceforge.net/xml/os.xsd' >
+
+<structural-specification>
+
+<role-definitions>
+      <role id="onibus"></role>
+      <role id="taxi"></role>
+      <role id="van"></role>
+</role-definitions>
+
+<group-specification id="road">
+    <roles>      
+       <role id="onibus" min="1" max="6"/>
+       <role id="taxi" min="1" max="2"/>
+       <role id="van" min="1" max="2"/>
+    </roles>
+
+    <links>
+       <link from="onibus" to="onibus" type="communication" scope="intra-group" bi-dir="true"/>
+    </links>    
+</group-specification>
+</structural-specification>
+
+<functional-specification>
+    <scheme id="transporte_passageiros">        
+        <goal id="ppp" ttf="5 seconds" ds="Parar nos Pontos de Parada">
+            <plan operator="sequence">
+                <goal id="embarcar" ds="Embarcar Passageiros"  ttf="2 seconds"/>
+                <goal id="desembarcar" ds="Desembarcar Passageiros" ttf="3 seconds"/>
+                <goal id="negar_embarque" ds="Negar Embarque" ttf="1 seconds"/>
+                <goal id="buscar_passageiro" ds="Buscar passageiro no local de embarque" ttf="4 seconds"/>
+                <goal id="pegar_passageiro" ds="Pegar passageiro" ttf="1 seconds"/>
+            </plan>
+        </goal>
+
+        <mission id="mEmbarque" min="1" max="3">
+            <goal id="embarcar"/>            
+        </mission>
+        <mission id="mDesembarque" min="1" max="3">
+            <goal id="desembarcar"/>            
+        </mission>
+        <mission id="mNegarEmbarque" min="1" max="3">            
+            <goal id="negar_embarque"/>
+        </mission>
+        <mission id="mBuscarPassageiro" min="1" max="3">            
+            <goal id="buscar_passageiro"/>
+        </mission>
+        <mission id="mPegar_passageiro" min="1" max="3">            
+            <goal id="pegar_passageiro"/>
+        </mission>
+       
+    </scheme>
+</functional-specification>
+
+<normative-specification>
+   <norm id="norm1" type="obligation" role="onibus" mission="mDesembarque"/>
+   <norm id="norm2" type="obligation" role="onibus" mission="mEmbarque"/>
+   <norm id="norm3" type="obligation" role="onibus" mission="mNegarEmbarque"/>
+   <norm id="norm4" type="permission" role="taxi" mission="mBuscarPassageiro"/>
+   <norm id="norm5" type="obligation" role="van" mission="mPegar_passageiro"/>
+</normative-specification>
+
+</organisational-specification>
